@@ -15,9 +15,18 @@ export default function() {
     UI.alert("请选择目标页面", "未选中页面");
     return
   }
-  var selectPage = pages[0]
-  var artboard = selectPage.layers[0]
-  console.log(artboard)
+
+  var selectPage = desingTokensPage
+
+  const artboards = selectPage.layers.filter(layer => layer.selected === true)
+  var artboard = artboards[0]
+  if (!artboard) {
+     artboard = selectPage.layers[0]
+  }
+  if (!artboard) {
+    UI.alert("选中内容为空", "未选中页面");
+    return
+  }
   var jsonContent = {
     "canvas_w": artboard.frame.width,
     "canvas_h": artboard.frame.height,
@@ -26,25 +35,32 @@ export default function() {
   var poster_shapes = []
   var poster_image = []
   var poster_text = []
+  var poster_other = []
   var export_layers = []
+
   artboard.layers.forEach(function (layer, i) {
     var item = {
         "frame": layer.frame,
         "name": layer.name,
         "level": i,
-        "type_name": layer.type
+        "type_name": layer.type,
+        "locked":layer.locked
     }
     if (layer.type == 'Text') {
       item["style"] = layer.style
       item["layer_type"] = 1
       poster_text.push(item)
-    }else if (layer.type == 'Image') {
+    }else if (layer.type == 'Image' || layer.type == 'Group') {
       item["layer_type"] = 2
+      item["type_name"] = 'Image'
       poster_image.push(item)
     }else if (layer.type == 'ShapePath') {
       item["svg"] = layer.getSVGPath()
       item["layer_type"] = 3
       poster_shapes.push(item)
+    }else {
+      item["layer_type"] = 4
+      poster_other.push(item)
     }
     export_layers.push(layer)
 
@@ -52,6 +68,7 @@ export default function() {
   jsonContent["layer_shapes"] = poster_shapes
   jsonContent["layer_images"] = poster_image
   jsonContent["layer_texts"] = poster_text
+  jsonContent["layer_other"] = poster_other
 
   let jsonStr = JSON.stringify(jsonContent)
   let defaultFileName = "config.json"
@@ -71,11 +88,15 @@ export default function() {
           formats: 'png',
           scales: '2x',
           output: imagePath,
+          overwriting: true,
+          trimmed: false
         }
     for (let index in export_layers) {
         var export_item = export_layers[index]
-        export_item.name = export_item.name
-        sketch.export(export_item, exportOptions)
+        if (export_item.name != 'cut_position') {
+          export_item.name = export_item.name
+          sketch.export(export_item, exportOptions)
+        }
     }
 
 
