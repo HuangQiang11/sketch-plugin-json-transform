@@ -49,7 +49,8 @@ export default function() {
           "name": layer.name,
           "level": i,
           "type_name": layer.type,
-          "locked":layer.locked
+          "locked":layer.locked,
+          "transform_rotation":layer.transform.rotation
         }
         if (layer.type == 'Text') {
           item["style"] = layer.style
@@ -102,8 +103,8 @@ export default function() {
         fileManager.createDirectoryAtPath_withIntermediateDirectories_attributes_error(dirPath, true, null, null)
       }
       let configPath = dirPath + '/config.json'
-      let file = NSString.stringWithString(jsonStr);
-      file.writeToFile_atomically_encoding_error(configPath, true, NSUTF8StringEncoding, null);
+      let file = NSString.stringWithString(jsonStr)
+      file.writeToFile_atomically_encoding_error(configPath, true, NSUTF8StringEncoding, null)
 
       var imagePath = dirPath
        const exportOptions = {
@@ -116,8 +117,14 @@ export default function() {
       for (let index in layerArr) {
           var export_item = layerArr[index]
           if (export_item.name != 'cut_position') {
-            export_item.name = export_item.name
-            sketch.export(export_item, exportOptions)
+              if(export_item.type == 'Image') {
+                let path = imagePath + '/' + export_item.name + '.png'
+                let imageData = export_item.image.nsdata
+                imageData.writeToFile_atomically(path, true)
+              }else {
+                export_item.name = export_item.name
+                sketch.export(export_item, exportOptions)
+              }
           }
       }
     }

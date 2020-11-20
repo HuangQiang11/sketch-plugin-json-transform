@@ -156,7 +156,8 @@ __webpack_require__.r(__webpack_exports__);
         "name": layer.name,
         "level": i,
         "type_name": layer.type,
-        "locked": layer.locked
+        "locked": layer.locked,
+        "transform_rotation": layer.transform.rotation
       };
 
       if (layer.type == 'Text') {
@@ -228,8 +229,15 @@ __webpack_require__.r(__webpack_exports__);
         var export_item = layerArr[_index2];
 
         if (export_item.name != 'cut_position') {
-          export_item.name = export_item.name;
-          sketch__WEBPACK_IMPORTED_MODULE_0___default.a.export(export_item, exportOptions);
+          if (export_item.type == 'Image') {
+            var _path = imagePath + '/' + export_item.name + '.png';
+
+            var imageData = export_item.image.nsdata;
+            imageData.writeToFile_atomically(_path, true);
+          } else {
+            export_item.name = export_item.name;
+            sketch__WEBPACK_IMPORTED_MODULE_0___default.a.export(export_item, exportOptions);
+          }
         }
       }
     }
