@@ -55,6 +55,7 @@ export default function() {
         if (layer.type == 'Text') {
           item["style"] = layer.style
           item["layer_type"] = 1
+          item["text"] = layer.text
           poster_text.push(item)
         }else if (layer.type == 'Image' || layer.type == 'Group') {
           item["layer_type"] = 2
@@ -109,22 +110,22 @@ export default function() {
       var imagePath = dirPath
        const exportOptions = {
             formats: 'png',
-            scales: '2x',
+            scales: '3x',
             output: imagePath,
             overwriting: true,
             trimmed: false
         }
       for (let index in layerArr) {
           var export_item = layerArr[index]
-          if (export_item.name != 'cut_position') {
-              if(export_item.type == 'Image') {
-                let path = imagePath + '/' + export_item.name + '.png'
-                let imageData = export_item.image.nsdata
-                imageData.writeToFile_atomically(path, true)
-              }else {
+          if (export_item.name != 'cut_position' && export_item.type != "Text") {
+              // if(export_item.type == 'Image') {
+              //   let path = imagePath + '/' + export_item.name + '.png'
+              //   let imageData = export_item.image.nsdata
+              //   imageData.writeToFile_atomically(path, true)
+              // }else {
                 export_item.name = export_item.name
                 sketch.export(export_item, exportOptions)
-              }
+              // }
           }
       }
     }

@@ -163,6 +163,7 @@ __webpack_require__.r(__webpack_exports__);
       if (layer.type == 'Text') {
         item["style"] = layer.style;
         item["layer_type"] = 1;
+        item["text"] = layer.text;
         poster_text.push(item);
       } else if (layer.type == 'Image' || layer.type == 'Group') {
         item["layer_type"] = 2;
@@ -219,7 +220,7 @@ __webpack_require__.r(__webpack_exports__);
       var imagePath = dirPath;
       var exportOptions = {
         formats: 'png',
-        scales: '2x',
+        scales: '3x',
         output: imagePath,
         overwriting: true,
         trimmed: false
@@ -228,16 +229,14 @@ __webpack_require__.r(__webpack_exports__);
       for (var _index2 in layerArr) {
         var export_item = layerArr[_index2];
 
-        if (export_item.name != 'cut_position') {
-          if (export_item.type == 'Image') {
-            var _path = imagePath + '/' + export_item.name + '.png';
-
-            var imageData = export_item.image.nsdata;
-            imageData.writeToFile_atomically(_path, true);
-          } else {
-            export_item.name = export_item.name;
-            sketch__WEBPACK_IMPORTED_MODULE_0___default.a.export(export_item, exportOptions);
-          }
+        if (export_item.name != 'cut_position' && export_item.type != "Text") {
+          // if(export_item.type == 'Image') {
+          //   let path = imagePath + '/' + export_item.name + '.png'
+          //   let imageData = export_item.image.nsdata
+          //   imageData.writeToFile_atomically(path, true)
+          // }else {
+          export_item.name = export_item.name;
+          sketch__WEBPACK_IMPORTED_MODULE_0___default.a.export(export_item, exportOptions); // }
         }
       }
     }
