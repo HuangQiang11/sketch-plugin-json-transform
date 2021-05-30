@@ -44,16 +44,24 @@ export default function() {
 
 
     artboard.layers.forEach(function (layer, i) {
-        var item = {
-          "frame": layer.frame,
-          "name": layer.name,
-          "level": i,
-          "type_name": layer.type,
-          "locked":layer.locked,
-          "transform_rotation":layer.transform.rotation
-        }
+
+
+        var item = {}
+        Object.assign(item,{},JSON.parse(JSON.stringify(layer)));
+        item["level"] = i
+        item["type_name"] = layer.type
+        item["transform_rotation"] = layer.transform.rotation
+
+        // var item = {
+        //   "frame": layer.frame,
+        //   "name": layer.name,
+        //   "level": i,
+        //   "type_name": layer.type,
+        //   "locked":layer.locked,
+        //   "transform_rotation":layer.transform.rotation,
+        //   "style": layer.style
+        // }
         if (layer.type == 'Text') {
-          item["style"] = layer.style
           item["layer_type"] = 1
           item["text"] = layer.text
           poster_text.push(item)
