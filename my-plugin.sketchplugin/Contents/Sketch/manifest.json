@@ -14,7 +14,7 @@
       "my-plugin.my-command-identifier"
     ]
   },
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "",
   "name": "my-plugin",
   "identifier": "my-plugin",

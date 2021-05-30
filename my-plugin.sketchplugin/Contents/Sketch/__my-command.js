@@ -155,7 +155,9 @@ __webpack_require__.r(__webpack_exports__);
       Object.assign(item, {}, JSON.parse(JSON.stringify(layer)));
       item["level"] = i;
       item["type_name"] = layer.type;
-      item["transform_rotation"] = layer.transform.rotation; // var item = {
+      item["transform_rotation"] = layer.transform.rotation; //delete layer info
+
+      item["layers"] = []; // var item = {
       //   "frame": layer.frame,
       //   "name": layer.name,
       //   "level": i,

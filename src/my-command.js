@@ -51,6 +51,8 @@ export default function() {
         item["level"] = i
         item["type_name"] = layer.type
         item["transform_rotation"] = layer.transform.rotation
+        //delete layer info
+        item["layers"] = []
 
         // var item = {
         //   "frame": layer.frame,
